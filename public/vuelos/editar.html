@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar vuelo</title>
+    <!-- Agrega los enlaces a los archivos CSS de Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <main class="container">
+        <form action="/vuelos/update" method="POST">
+
+            <div class="form-group">
+
+                <input type="hidden" class="form-control" id="id" name="id" required>
+            </div>
+            <div class="form-group">
+                <label for="numero_vuelo">Número de Vuelo:</label>
+                <input name="numero_vuelo" type="text" class="form-control" id="numero_vuelo" required maxlength="10"
+                    pattern="[A-Za-z0-9]{1,10}">
+            </div>
+            <div class="form-group">
+                <label for="aerolinea">Aerolínea:</label>
+                <input name="aerolinea" type="text" class="form-control" id="aerolinea" required maxlength="50">
+            </div>
+            <div class="form-group">
+                <label for="origen">Origen:</label>
+                <input name="origen" type="text" class="form-control" id="origen" required maxlength="50">
+            </div>
+            <div class="form-group">
+                <label for="destino">Destino:</label>
+                <input name="destino" type="text" class="form-control" id="destino" required maxlength="50">
+            </div>
+            <div class="form-group">
+                <label for="fecha_salida">Fecha de Salida:</label>
+                <input name="fecha_salida" type="date" class="form-control" id="fecha_salida" required>
+            </div>
+            <div class="form-group">
+                <label for="hora_salida">Hora de Salida:</label>
+                <input name="hora_salida" type="time" class="form-control" id="hora_salida" required>
+            </div>
+            <div class="form-group">
+                <label for="fecha_llegada">Fecha de Llegada:</label>
+                <input name="fecha_llegada" type="date" class="form-control" id="fecha_llegada" required>
+            </div>
+            <div class="form-group">
+                <label for="hora_llegada">Hora de Llegada:</label>
+                <input name="hora_llegada" type="time" class="form-control" id="hora_llegada" required>
+            </div>
+            <button type="submit" class="btn btn-primary" id="boton_editar">Editar</button>
+        </form>
+
+        <script>
+
+            let path = window.location.pathname.split("/");
+            let id = path[path.length - 1];
+            fetch(`/vuelos/encontrar/${id}`)
+                .then((response) => response.json())
+                .then((vuelo) => {
+                    // console.log(vuelo[0].fecha_llegada)
+                    let idHtml = document.getElementById('id');
+                    let numero_vuelo = document.getElementById('numero_vuelo');
+                    let aerolinea = document.getElementById('aerolinea');
+                    let origen = document.getElementById('origen');
+                    let destino = document.getElementById('destino');
+                    let fechaSalida = document.getElementById('fecha_salida');
+                    let horaSalida = document.getElementById('hora_salida');
+                    let fechaLlegada = document.getElementById('fecha_llegada');
+                    let horaLlegada = document.getElementById('hora_llegada');
+                    let boton_editar = document.getElementById('boton_editar');
+
+                    //formato de fechas para que se rellene el html
+                    let llegadaNOFormat = new Date(vuelo[0].fecha_llegada);
+                    let llegadaFormat = llegadaNOFormat.toISOString().split('T')[0];
+                    let salidaNOFormat = new Date(vuelo[0].fecha_salida);
+                    let salidaFormat = salidaNOFormat.toISOString().split('T')[0];
+
+                    idHtml.value = vuelo[0].id
+
+                    numero_vuelo.value = vuelo[0].numero_vuelo;
+                    aerolinea.value = vuelo[0].aerolinea;
+                    origen.value = vuelo[0].origen;
+                    destino.value = vuelo[0].destino;
+                    fechaSalida.value = salidaFormat;
+                    horaSalida.value = vuelo[0].hora_salida;
+                    fechaLlegada.value = llegadaFormat;
+                    horaLlegada.value = vuelo[0].hora_llegada;
+
+                    // boton_editar.addEventListener('click', (event) => {
+                    //     event.preventDefault();
+                    //     fetch(`/vuelos/update`, {
+                    //         method: "PUT"
+
+                    //     })
+                    //         .then((response) => response.json())
+                    //         .then((vuelos) => {
+                    //             if (vuelos.estado == true) {
+                    //                 // redireccionar a vuelos
+                    //                 window.location.href = "/vuelos";
+                    //             }
+                    //             if (vuelos.message) {
+                    //                 console.log(vuelos.message);
+                    //             }
+                    //         });
+                    // })
+
+                })
+
+
+
+        </script>
+    </main>
+</body>
+
+</html>

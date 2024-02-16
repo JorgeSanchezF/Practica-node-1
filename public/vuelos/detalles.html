@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de vuelo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+
+<body>
+    <a href="/vuelos" class="btn btn-primary mt-3">Volver a vuelos</a>
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Detalles del Vuelo</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Número de Vuelo:</strong>
+                        <span id="numero_vuelo"></span>
+                    </li>
+                    <li class="list-group-item"><strong>Aerolínea:</strong>
+                        <span id="aerolinea"></span>
+                    </li>
+                    <li class="list-group-item"><strong>Origen:</strong>
+                        <span id="origen"></span>
+                    </li>
+                    <li class="list-group-item"><strong>Destino:</strong>
+                        <span id="destino"></span>
+                    </li>
+                    <li class="list-group-item"><strong>Fecha de Salida:</strong>
+                        <span id="fecha_salida"></span>
+                    </li>
+                    <li class="list-group-item"><strong>Hora de Salida:</strong>
+                        <span id="hora_salida"></span>
+                    </li>
+                    <li class="list-group-item"><strong>Fecha de Llegada:</strong>
+                        <span id="fecha_llegada"></span>
+                    </li>
+                    <li class="list-group-item"><strong>Hora de Llegada:</strong>
+                        <span id="hora_llegada"></span>
+                    </li>
+                </ul>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        let path = window.location.pathname.split("/");
+        let id = path[path.length - 1];
+        fetch(`/vuelos/encontrar/${id}`)
+            .then((response) => response.json())
+            .then((vuelo) => {
+                console.log(vuelo[0].fecha_llegada);
+                let id = document.getElementById('id');
+                let numero_vuelo = document.getElementById('numero_vuelo');
+                let aerolinea = document.getElementById('aerolinea');
+                let origen = document.getElementById('origen');
+                let destino = document.getElementById('destino');
+                let fechaSalida = document.getElementById('fecha_salida');
+                let horaSalida = document.getElementById('hora_salida');
+                let fechaLlegada = document.getElementById('fecha_llegada');
+                let horaLlegada = document.getElementById('hora_llegada');
+                let boton_editar = document.getElementById('boton_editar');
+
+                //cambio de formato de fechas para mejor visibilidad
+                let llegadaNOFormat = new Date(vuelo[0].fecha_llegada);
+                let llegadaFormat = llegadaNOFormat.toISOString().split('T')[0];
+                let salidaNOFormat = new Date(vuelo[0].fecha_salida);
+                let salidaFormat = salidaNOFormat.toISOString().split('T')[0];
+
+                numero_vuelo.textContent = vuelo[0].numero_vuelo;
+                aerolinea.textContent = vuelo[0].aerolinea;
+                origen.textContent = vuelo[0].origen;
+                destino.textContent = vuelo[0].destino;
+                fechaSalida.textContent = salidaFormat;
+                horaSalida.textContent = vuelo[0].hora_salida;
+                fechaLlegada.textContent = llegadaFormat;
+                horaLlegada.textContent = vuelo[0].hora_llegada;
+            });
+
+    </script>
+</body>
+
+</html>
